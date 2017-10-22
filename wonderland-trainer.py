@@ -34,7 +34,7 @@ chars = sorted(list(set(text_tokens)))
 char_to_int = dict((c, i) for i, c in enumerate(chars))
 
 # now we summarize the data set
-n_chars = len(raw_text)
+n_chars = len(text_tokens)
 n_vocab = len(chars)
 print("Total Characters", n_chars)
 print("Total Vocab (unique chars)", n_vocab)
@@ -51,12 +51,12 @@ print("Total Vocab (unique chars)", n_vocab)
 '''
 
 # prepare the dataset of input to output pairs encoded as integers
-seq_length = 100
+seq_length = 20 
 dataX = []
 dataY = []
 for i in range(0, n_chars - seq_length, 1):
-    seq_in = raw_text[i:i + seq_length]
-    seq_out = raw_text[i + seq_length]
+    seq_in = text_tokens[i:i + seq_length]
+    seq_out = text_tokens[i + seq_length]
     dataX.append([char_to_int[char] for char in seq_in])
     dataY.append(char_to_int[seq_out])
 n_patterns = len(dataX)
@@ -106,7 +106,7 @@ y = np_utils.to_categorical(dataY)
 
 # define the LSTM model
 model = Sequential()
-model.add(LSTM(256, input_shape=(X.shape[1], X.shape[2])))
+model.add(LSTM(500, input_shape=(X.shape[1], X.shape[2])))
 model.add(Dropout(0,2))
 model.add(Dense(y.shape[1], activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam')
@@ -135,7 +135,8 @@ callbacks_list=[checkpoint]
 # fit the model to the data, using 20 epochs and 128 patterns
 model.fit(X, y, epochs=20, batch_size=128, callbacks=callbacks_list)
 
-pickle.dump(model, open("model.p", "wb"))
+#pickle.dump(model, open("model.p", "wb"))
+model.save('model.hdf5')
 pickle.dump(chars, open("chars.p", "wb"))
 pickle.dump(dataX, open("dataX.p", "wb"))
 pickle.dump(n_vocab, open("n_vocab.p", "wb"))

@@ -16,18 +16,21 @@ in the wonderland.py script.
 import numpy
 import pickle
 import sys
+from keras.models import load_model
 
 
 # recover the model from file
-model = pickle.load(open("model.p", "rb"))
+#model = pickle.load(open("model.p", "rb"))
+model = load_model('model.hdf5')
 chars = pickle.load(open("chars.p", "rb"))
 dataX = pickle.load(open("dataX.p", "rb"))
 n_vocab = pickle.load(open("n_vocab.p", "rb"))
 
 # load the network weights
-filename = "weights-improvement-xx-x-xxxx.hdf5"
+filename = "weights-improvement-19-3.3390.hdf5"
 model.load_weights(filename)
 model.compile(loss='categorical_crossentropy', optimizer='adam')
+
 
 # create a reverse mapping for converting integers back to characters
 int_to_char = dict((i, c) for i, c in enumerate(chars))
@@ -44,7 +47,7 @@ int_to_char = dict((i, c) for i, c in enumerate(chars))
 # pick a random seed
 start = numpy.random.randint(0, len(dataX)-1)
 pattern = dataX[start]
-print("Seed:", "\"", ''.join([int_to_char[value] for value in pattern]), "\"")
+print("Seed:", "\"", ' '.join([int_to_char[value] for value in pattern]), "\"")
 # generate characters
 for i in range(1000):
     x = numpy.reshape(pattern, (1, len(pattern), 1))
@@ -54,6 +57,7 @@ for i in range(1000):
     result = int_to_char[index]
     seq_in = [int_to_char[value] for value in pattern]
     sys.stdout.write(result)
+    sys.stdout.write(' ')
     pattern.append(index)
     pattern = pattern[1:len(pattern)]
 print("\nDone.")
