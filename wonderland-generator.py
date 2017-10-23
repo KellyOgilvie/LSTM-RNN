@@ -27,7 +27,7 @@ dataX = pickle.load(open("dataX.p", "rb"))
 n_vocab = pickle.load(open("n_vocab.p", "rb"))
 
 # load the network weights
-filename = "weights-improvement-19-3.3390.hdf5"
+filename = "weights-improvement-19-5.2347.hdf5"
 model.load_weights(filename)
 model.compile(loss='categorical_crossentropy', optimizer='adam')
 
