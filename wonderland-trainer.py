@@ -26,7 +26,7 @@ from keras.callbacks import ModelCheckpoint
 from keras.utils import np_utils
 
 # load ascii text and convert to lowercase
-filename = "wonderland.txt"
+filename = "wonderland-ASCII.txt"
 raw_text = open(filename).read()
 raw_text = raw_text.lower()
 table = raw_text.maketrans("", "", string.punctuation)
